@@ -5,7 +5,51 @@ import "fmt"
 
 type Color int
 
-const Red Color = 31
+const (
+	Black Color = iota + 30
+	Red
+	Green
+	Yellow
+	Blue
+	Magenta
+	Cyan
+	White
+	_ // Code 38 is for 256/24-bit foreground color.
+	Default
+
+	BgBlack
+	BgRed
+	BgGreen
+	BgYellow
+	BgBlue
+	BgMagenta
+	BgCyan
+	BgWhite
+	_ // Code 48 is for 256/24-bit background color.
+	BgDefault
+)
+
+const (
+	BrightBlack Color = iota + 90
+	BrightRed
+	BrightGreen
+	BrightYellow
+	BrightBlue
+	BrightMagenta
+	BrightCyan
+	BrightWhite
+)
+
+const (
+	BgBrightBlack Color = iota + 100
+	BgBrightRed
+	BgBrightGreen
+	BgBrightYellow
+	BgBrightBlue
+	BgBrightMagenta
+	BgBrightCyan
+	BgBrightWhite
+)
 
 func (c Color) Style(text string) string {
 	return "\033[31m" + text + "\033[0m"
