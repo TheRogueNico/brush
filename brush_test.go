@@ -3,10 +3,44 @@ package brush
 import "testing"
 
 func TestPaint(t *testing.T) {
-	got := Paint(Red, "Hello,", " World", "!")
-	want := "\033[31mHello, World!\033[0m"
-
-	if got != want {
-		t.Errorf("Paint: got %v want %v", got, want)
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		s    Styler
+		a    []any
+		want string
+	}{
+		{
+			name: "red foreground",
+			s:    Red,
+			a:    []any{"Hello, ", "World", "!"},
+			want: "\x1b[31mHello, World!\x1b[0m",
+		},
+		{
+			name: "bright red foreground",
+			s:    BrightRed,
+			a:    []any{"Hello, ", "World", "!"},
+			want: "\x1b[91mHello, World!\x1b[0m",
+		},
+		{
+			name: "bright yellow background",
+			s:    BrightYellow,
+			a:    []any{"Hello, ", "World", "!"},
+			want: "\x1b[42mHello, World!\x1b[0m",
+		},
+		{
+			name: "default returns plain text unchanged",
+			s:    Default,
+			a:    []any{"Hello, ", "World", "!"},
+			want: "Hello, World!",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Paint(tt.s, tt.a...)
+			if got != tt.want {
+				t.Errorf("Paint() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
