@@ -23,8 +23,8 @@ func TestPaint(t *testing.T) {
 			want: "\x1b[91mHello, World!\x1b[0m",
 		},
 		{
-			name: "bright yellow background",
-			s:    BrightYellow,
+			name: "green background",
+			s:    BgGreen,
 			a:    []any{"Hello, ", "World", "!"},
 			want: "\x1b[42mHello, World!\x1b[0m",
 		},
