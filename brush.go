@@ -52,7 +52,10 @@ const (
 )
 
 func (c Color) Style(text string) string {
-	return "\033[31m" + text + "\033[0m"
+	if c == Default {
+		return text
+	}
+	return fmt.Sprintf("\x1b[%dm%s\x1b[0m", c, text)
 }
 
 type Styler interface {
