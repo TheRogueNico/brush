@@ -6,7 +6,7 @@ import "fmt"
 type Color int
 
 const (
-	Black Color = iota + 30
+	Black Color = iota
 	Red
 	Green
 	Yellow
@@ -28,14 +28,14 @@ func (c Color) fgCode() int {
 	if c >= BrightBlack {
 		return int(c-BrightBlack) + 90
 	}
-	return int(c-Black) + 30
+	return int(c) + 30
 }
 
 func (c Color) bgCode() int {
 	if c >= BrightBlack {
 		return int(c-BrightBlack) + 100
 	}
-	return int(c-Black) + 40
+	return int(c) + 40
 }
 
 func (c Color) Style(text string) string {
