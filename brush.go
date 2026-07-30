@@ -6,7 +6,8 @@ import "fmt"
 type Color int
 
 const (
-	Black Color = iota
+	Default Color = iota
+	Black
 	Red
 	Green
 	Yellow
@@ -28,14 +29,14 @@ func (c Color) fgCode() int {
 	if c >= BrightBlack {
 		return int(c-BrightBlack) + 90
 	}
-	return int(c) + 30
+	return int(c-Black) + 30
 }
 
 func (c Color) bgCode() int {
 	if c >= BrightBlack {
 		return int(c-BrightBlack) + 100
 	}
-	return int(c) + 40
+	return int(c-Black) + 40
 }
 
 type Attribute int
@@ -55,6 +56,9 @@ type Look struct {
 }
 
 func (c Color) Style(text string) string {
+	if c == Default {
+		return text
+	}
 	code := c.fgCode()
 	return fmt.Sprintf("\x1b[%dm%s\x1b[0m", code, text)
 }
