@@ -43,6 +43,14 @@ func (c Color) bgCode() int {
 	return int(c-Black) + 40
 }
 
+func (c Color) Style(text string) string {
+	if c == Default {
+		return text
+	}
+	code := c.fgCode()
+	return fmt.Sprintf("\x1b[%dm%s\x1b[0m", code, text)
+}
+
 type Attribute int
 
 const (
@@ -52,12 +60,6 @@ const (
 	Underline
 	Strikethrough
 )
-
-type Look struct {
-	Foreground Color
-	Background Color
-	Attributes Attribute
-}
 
 var attributeCodes = []struct {
 	attr Attribute
@@ -70,12 +72,10 @@ var attributeCodes = []struct {
 	{Strikethrough, 9},
 }
 
-func (c Color) Style(text string) string {
-	if c == Default {
-		return text
-	}
-	code := c.fgCode()
-	return fmt.Sprintf("\x1b[%dm%s\x1b[0m", code, text)
+type Look struct {
+	Foreground Color
+	Background Color
+	Attributes Attribute
 }
 
 func (l Look) Style(text string) string {
