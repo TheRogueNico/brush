@@ -38,9 +38,30 @@ func (c Color) bgCode() int {
 	return int(c) + 40
 }
 
+type Attribute int
+
+const (
+	Bold Attribute = 1 << iota
+	Dim
+	Italic
+	Underline
+	Strikethrough
+)
+
+type Look struct {
+	Foreground Color
+	Background Color
+	Attributes Attribute
+}
+
 func (c Color) Style(text string) string {
 	code := c.fgCode()
 	return fmt.Sprintf("\x1b[%dm%s\x1b[0m", code, text)
+}
+
+func (l Look) Style(text string) string {
+	// TODO: Write the actual logic
+	return ""
 }
 
 type Styler interface {
