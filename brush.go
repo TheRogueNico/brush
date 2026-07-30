@@ -14,23 +14,7 @@ const (
 	Magenta
 	Cyan
 	White
-	_ // Code 38 is for 256/24-bit foreground color.
-	Default
-
-	BgBlack
-	BgRed
-	BgGreen
-	BgYellow
-	BgBlue
-	BgMagenta
-	BgCyan
-	BgWhite
-	_ // Code 48 is for 256/24-bit background color.
-	BgDefault
-)
-
-const (
-	BrightBlack Color = iota + 90
+	BrightBlack
 	BrightRed
 	BrightGreen
 	BrightYellow
@@ -40,22 +24,23 @@ const (
 	BrightWhite
 )
 
-const (
-	BgBrightBlack Color = iota + 100
-	BgBrightRed
-	BgBrightGreen
-	BgBrightYellow
-	BgBrightBlue
-	BgBrightMagenta
-	BgBrightCyan
-	BgBrightWhite
-)
+func (c Color) fgCode() int {
+	if c >= BrightBlack {
+		return int(c-BrightBlack) + 90
+	}
+	return int(c-Black) + 30
+}
+
+func (c Color) bgCode() int {
+	if c >= BrightBlack {
+		return int(c-BrightBlack) + 100
+	}
+	return int(c-Black) + 40
+}
 
 func (c Color) Style(text string) string {
-	if c == Default {
-		return text
-	}
-	return fmt.Sprintf("\x1b[%dm%s\x1b[0m", c, text)
+	code := c.fgCode()
+	return fmt.Sprintf("\x1b[%dm%s\x1b[0m", code, text)
 }
 
 type Styler interface {
