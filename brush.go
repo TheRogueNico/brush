@@ -1,7 +1,11 @@
 // Package brush styles terminal text with ANSI colors.
 package brush
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
 type Color int
 
@@ -55,6 +59,17 @@ type Look struct {
 	Attributes Attribute
 }
 
+var attributeCodes = []struct {
+	attr Attribute
+	code int
+}{
+	{Bold, 1},
+	{Dim, 2},
+	{Italic, 3},
+	{Underline, 4},
+	{Strikethrough, 9},
+}
+
 func (c Color) Style(text string) string {
 	if c == Default {
 		return text
@@ -64,8 +79,26 @@ func (c Color) Style(text string) string {
 }
 
 func (l Look) Style(text string) string {
-	// TODO: Write the actual logic
-	return ""
+	var codes []string
+
+	if l.Foreground != Default {
+		codes = append(codes, strconv.Itoa(l.Foreground.fgCode()))
+	}
+	if l.Background != Default {
+		codes = append(codes, strconv.Itoa(l.Background.bgCode()))
+	}
+
+	for _, ac := range attributeCodes {
+		// Checks if attribute bit is set using bitwise AND
+		if l.Attributes&ac.attr != 0 {
+			codes = append(codes, strconv.Itoa(ac.code))
+		}
+	}
+
+	if len(codes) == 0 {
+		return text
+	}
+	return fmt.Sprintf("\x1b[%sm%s\x1b[0m", strings.Join(codes, ";"), text)
 }
 
 type Styler interface {
