@@ -23,7 +23,7 @@ func TestPaint_Color(t *testing.T) {
 			want: "\x1b[91mHello, World!\x1b[0m",
 		},
 		{
-			name: "default color: no styling",
+			name: "default color no styling",
 			s:    Default,
 			a:    []any{"Hello, ", "World", "!"},
 			want: "Hello, World!",
@@ -65,31 +65,31 @@ func TestPaint_Look(t *testing.T) {
 		want string
 	}{
 		{
-			name: "info: bright blue italic",
+			name: "bright blue italic",
 			s:    infoLook,
 			a:    []any{"starting up..."},
 			want: "\x1b[94;3mstarting up...\x1b[0m",
 		},
 		{
-			name: "warning: yellow bold",
+			name: "yellow bold",
 			s:    warningLook,
 			a:    []any{"disk usage at ", 90, "%"},
 			want: "\x1b[33;1mdisk usage at 90%\x1b[0m",
 		},
 		{
-			name: "error: white on red, bold italic",
+			name: "white on red bold italic",
 			s:    errorLook,
 			a:    []any{"FATAL: ", "connection refused"},
 			want: "\x1b[37;41;1;3mFATAL: connection refused\x1b[0m",
 		},
 		{
-			name: "all attributes, no color",
+			name: "all attributes no color",
 			s:    allAttributes,
 			a:    []any{"kitchen sink"},
 			want: "\x1b[1;2;3;4;9mkitchen sink\x1b[0m",
 		},
 		{
-			name: "zero value Look: no styling applied",
+			name: "zero value Look no styling",
 			s:    Look{},
 			a:    []any{"plain ", "text"},
 			want: "plain text",
