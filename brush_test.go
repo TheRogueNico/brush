@@ -22,6 +22,12 @@ func TestPaint_Color(t *testing.T) {
 			a:    []any{"Hello, ", "World", "!"},
 			want: "\x1b[91mHello, World!\x1b[0m",
 		},
+		{
+			name: "default color: no styling",
+			s:    Default,
+			a:    []any{"Hello, ", "World", "!"},
+			want: "Hello, World!",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
