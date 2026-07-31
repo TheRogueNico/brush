@@ -1,7 +1,12 @@
 // Package brush styles terminal output using ANSI escape codes.
 package brush
 
-import "strconv"
+import (
+	"os"
+	"strconv"
+)
+
+var Disabled = os.Getenv("NO_COLOR") != ""
 
 const (
 	esc   = "\x1b["
@@ -41,7 +46,7 @@ func (c Color) fgCode() int {
 }
 
 func (c Color) Paint(s string) string {
-	if s == "" || c == NoColor {
+	if s == "" || Disabled || c == NoColor {
 		return s
 	}
 	return esc + strconv.Itoa(c.fgCode()) + end + s + reset
