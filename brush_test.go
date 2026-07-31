@@ -2,7 +2,7 @@ package brush
 
 import "testing"
 
-func TestColorPaint(t *testing.T) {
+func TestColor_Paint(t *testing.T) {
 	tests := []struct {
 		name  string
 		color Color
