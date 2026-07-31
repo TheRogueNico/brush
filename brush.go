@@ -90,6 +90,30 @@ func (c Color) String() string {
 
 type Attribute uint8
 
+const (
+	Bold Attribute = 1 << iota
+	Faint
+	Italic
+	Underline
+	Blink
+	Reverse
+	Strikethrough
+)
+
+var attributeTable = []struct {
+	attr Attribute
+	code int
+	name string
+}{
+	{Bold, 1, "Bold"},
+	{Faint, 2, "Faint"},
+	{Italic, 3, "Italic"},
+	{Underline, 4, "Underline"},
+	{Blink, 5, "Blink"},
+	{Reverse, 7, "Reverse"},
+	{Strikethrough, 9, "Strikethrough"},
+}
+
 type Style struct {
 	Foreground Color
 	Background Color
@@ -97,10 +121,27 @@ type Style struct {
 }
 
 func (s Style) Paint(text string) string {
-	var codes []string
-	if text != "" && !Disabled && s.Foreground != NoColor {
-		codes = append(codes, strconv.Itoa(s.Foreground.fgCode()))
+	if text == "" {
+		return text
 	}
 
+	var codes []string
+	for _, a := range attributeTable {
+		if s.Attributes&a.attr != 0 {
+			codes = append(codes, strconv.Itoa(a.code))
+		}
+	}
+	if !Disabled {
+		if s.Foreground != NoColor {
+			codes = append(codes, strconv.Itoa(s.Foreground.fgCode()))
+		}
+		if s.Background != NoColor {
+			codes = append(codes, strconv.Itoa(s.Background.bgCode()))
+		}
+	}
+
+	if len(codes) == 0 {
+		return text
+	}
 	return esc + strings.Join(codes, ";") + end + text + reset
 }
