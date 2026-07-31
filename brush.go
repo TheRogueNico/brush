@@ -3,6 +3,12 @@ package brush
 
 import "strconv"
 
+const (
+	esc   = "\x1b["
+	end   = "m"
+	reset = "\x1b[0m"
+)
+
 type Color int8
 
 const (
@@ -38,5 +44,5 @@ func (c Color) Paint(s string) string {
 	if s == "" || c == NoColor {
 		return s
 	}
-	return "\x1b[" + strconv.Itoa(c.fgCode()) + "m" + s + "\x1b[0m"
+	return esc + strconv.Itoa(c.fgCode()) + end + s + reset
 }
