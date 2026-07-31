@@ -47,13 +47,70 @@ func TestColor_String(t *testing.T) {
 
 func TestStyle_Paint(t *testing.T) {
 	info := Style{Foreground: Blue}
-	// warning:= Style{Foreground: Blue, Attributes: Italic}
-	// error:= Style{Foreground: White, Background: Red, Attributes: Italic | Bold}
+	warning := Style{Foreground: Yellow, Attributes: Italic}
+	error := Style{Foreground: Black, Background: BrightRed, Attributes: Italic | Bold}
 
-	got := info.Paint("starting up...")
-	want := "\x1b[34mstarting up...\x1b[0m"
-
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name  string // description of this test case
+		style Style
+		text  string
+		want  string
+	}{
+		{
+			name:  "zero value",
+			style: Style{},
+			text:  "no style",
+			want:  "no style",
+		},
+		{
+			name:  "foreground only",
+			style: info,
+			text:  "starting up...",
+			want:  "\x1b[34mstarting up...\x1b[0m",
+		},
+		{
+			name:  "background only",
+			style: Style{Background: Blue},
+			text:  "Highlight",
+			want:  "\x1b[44mHighlight\x1b[0m",
+		},
+		{
+			name:  "attributes only",
+			style: Style{Attributes: Underline},
+			text:  "diceware",
+			want:  "\x1b[4mdiceware\x1b[0m",
+		},
+		{
+			name:  "attribute and foreground",
+			style: warning,
+			text:  "Disk is nearly full",
+			want:  "\x1b[3;33mDisk is nearly full\x1b[0m",
+		},
+		{
+			name:  "attributes foreground and background",
+			style: error,
+			text:  "Connection lost!",
+			want:  "\x1b[1;3;30;101mConnection lost!\x1b[0m",
+		},
+		{
+			name:  "explicit NoColor is equivalent to unset",
+			style: Style{Foreground: NoColor, Background: NoColor, Attributes: Bold},
+			text:  "x",
+			want:  "\x1b[1mx\x1b[0m",
+		},
+		{
+			name:  "empty string",
+			style: Style{Foreground: Red, Attributes: Bold},
+			text:  "",
+			want:  "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.style.Paint(tt.text)
+			if got != tt.want {
+				t.Errorf("Paint() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
