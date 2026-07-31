@@ -23,3 +23,24 @@ func TestColorPaint(t *testing.T) {
 		})
 	}
 }
+
+func TestColor_String(t *testing.T) {
+	tests := []struct {
+		name  string // description of this test case
+		color Color
+		want  string
+	}{
+		{"no color", NoColor, "NoColor"},
+		{"red", Red, "Red"},
+		{"bright white", BrightWhite, "BrightWhite"},
+		{"undefined color", Color(99), "Color(99)"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.color.String()
+			if got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
