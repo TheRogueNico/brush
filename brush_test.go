@@ -44,3 +44,16 @@ func TestColor_String(t *testing.T) {
 		})
 	}
 }
+
+func TestStyle_Paint(t *testing.T) {
+	info := Style{Foreground: Blue}
+	// warning:= Style{Foreground: Blue, Attributes: Italic}
+	// error:= Style{Foreground: White, Background: Red, Attributes: Italic | Bold}
+
+	got := info.Paint("starting up...")
+	want := "\x1b[34mstarting up...\x1b[0m"
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
