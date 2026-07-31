@@ -54,6 +54,15 @@ func (c Color) fgCode() int {
 	return int(c-BrightBlack) + 90
 }
 
+func (c Color) bgCode() int {
+	// Normal colors
+	if c < BrightBlack {
+		return int(c-Black) + 40
+	}
+	// Bright colors
+	return int(c-BrightBlack) + 100
+}
+
 // Paint wraps s in the ANSI escape sequence for the foreground color c,
 // followed by a reset sequence. If c is NoColor, coloring is disabled
 // globally via Disabled, or s is empty, s is returned unchanged.
