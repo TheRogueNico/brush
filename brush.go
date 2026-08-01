@@ -120,6 +120,20 @@ type Style struct {
 	Attributes Attribute
 }
 
+func (a Attribute) String() string {
+	var names []string
+	for _, t := range attributeTable {
+		if a&t.attr != 0 {
+			names = append(names, t.name)
+			a &^= t.attr
+		}
+	}
+	if a != 0 {
+		names = append(names, "Attribute("+strconv.Itoa(int(a))+")")
+	}
+	return strings.Join(names, "|")
+}
+
 func (s Style) Paint(text string) string {
 	if text == "" {
 		return text
