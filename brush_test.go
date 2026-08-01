@@ -46,9 +46,9 @@ func TestColor_String(t *testing.T) {
 }
 
 func TestStyle_Paint(t *testing.T) {
-	info := Style{Foreground: Blue}
-	warning := Style{Foreground: Yellow, Attributes: Italic}
-	error := Style{Foreground: Black, Background: BrightRed, Attributes: Italic | Bold}
+	infoStyle := Style{Foreground: Blue}
+	warningStyle := Style{Foreground: Yellow, Attributes: Italic}
+	errorStyle := Style{Foreground: Black, Background: BrightRed, Attributes: Italic | Bold}
 
 	tests := []struct {
 		name  string // description of this test case
@@ -64,7 +64,7 @@ func TestStyle_Paint(t *testing.T) {
 		},
 		{
 			name:  "foreground only",
-			style: info,
+			style: infoStyle,
 			text:  "starting up...",
 			want:  "\x1b[34mstarting up...\x1b[0m",
 		},
@@ -82,13 +82,13 @@ func TestStyle_Paint(t *testing.T) {
 		},
 		{
 			name:  "attribute and foreground",
-			style: warning,
+			style: warningStyle,
 			text:  "Disk is nearly full",
 			want:  "\x1b[3;33mDisk is nearly full\x1b[0m",
 		},
 		{
 			name:  "attributes foreground and background",
-			style: error,
+			style: errorStyle,
 			text:  "Connection lost!",
 			want:  "\x1b[1;3;30;101mConnection lost!\x1b[0m",
 		},
