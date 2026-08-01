@@ -114,3 +114,26 @@ func TestStyle_Paint(t *testing.T) {
 		})
 	}
 }
+
+func TestAttribute_String(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		attr Attribute
+		want string
+	}{
+		{"zero", 0, ""},
+		{"single attribute", Bold, "Bold"},
+		{"two attributes", Bold | Italic, "Bold|Italic"},
+		{"number", 7, "Bold|Faint|Italic"},
+		{"out of range", 128, "Attribute(128)"},
+		{"mixed valid and out of range", 129, "Bold|Attribute(128)"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.attr.String()
+			if got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
