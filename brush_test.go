@@ -256,9 +256,42 @@ func TestPaintFunc_Paint(t *testing.T) {
 	}
 }
 
-// Compile-time assertions that Color, Style and PaintFunc satisfy Painter.
+func TestCharClass_Paint(t *testing.T) {
+	rule := Stencil{Upper: Red, Lower: Green, Digit: Blue, Punct: Yellow, Symbol: Magenta}
+
+	tests := []struct {
+		name string
+		in   string
+		want string
+	}{
+		{"empty string", "", ""},
+		{"single class", "ABC", "\x1b[31mABC\x1b[0m"},
+		{"mixed classes no reset between classes", "AB12!!", "\x1b[31mAB\x1b[34m12\x1b[33m!!\x1b[0m"},
+		{"symbol class", "1+1=2", "\x1b[34m1\x1b[35m+\x1b[34m1\x1b[35m=\x1b[34m2\x1b[0m"},
+		{"reset on return to unstyled", "AB cd", "\x1b[31mAB\x1b[0m \x1b[32mcd\x1b[0m"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := rule.Paint(tt.in)
+			if got != tt.want {
+				t.Errorf("Paint(%q) = %q, want %q", tt.in, got, tt.want)
+			}
+		})
+	}
+
+	t.Run("zero value", func(t *testing.T) {
+		var zero Stencil
+		got := zero.Paint("AB 12 !!")
+		if got != "AB 12 !!" {
+			t.Errorf("Paint() = %q, want unchanged", got)
+		}
+	})
+}
+
+// Compile-time assertions that all types satisfy Painter.
 var (
 	_ Painter = Red
 	_ Painter = Style{}
 	_ Painter = PaintFunc(nil)
+	_ Painter = Stencil{}
 )

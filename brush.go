@@ -29,6 +29,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 // noColorEnvSet reports whether NO_COLOR is set to a non-empty value.
@@ -218,4 +219,62 @@ func (s Style) Paint(text string) string {
 		return text
 	}
 	return esc + strings.Join(codes, ";") + end + text + reset
+}
+
+type Stencil struct {
+	Upper  Color
+	Lower  Color
+	Digit  Color
+	Punct  Color
+	Symbol Color
+}
+
+func (s Stencil) colorFor(r rune) Color {
+	switch {
+	case unicode.IsUpper(r):
+		return s.Upper
+	case unicode.IsLower(r):
+		return s.Lower
+	case unicode.IsDigit(r):
+		return s.Digit
+	case unicode.IsPunct(r):
+		return s.Punct
+	case unicode.IsSymbol(r):
+		return s.Symbol
+	default:
+		return NoColor
+	}
+}
+
+func (s Stencil) Paint(text string) string {
+	if text == "" || Disabled {
+		return text
+	}
+
+	var b strings.Builder
+	b.Grow(len(text))
+
+	start := 0
+	current := NoColor
+	for i, r := range text {
+		class := s.colorFor(r)
+		if class == current {
+			continue
+		}
+		b.WriteString(text[start:i])
+		start = i
+		if class == NoColor {
+			b.WriteString(reset)
+		} else {
+			b.WriteString(esc)
+			b.WriteString(strconv.Itoa(class.fgCode()))
+			b.WriteString(end)
+		}
+		current = class
+	}
+	b.WriteString(text[start:])
+	if current != NoColor {
+		b.WriteString(reset)
+	}
+	return b.String()
 }
