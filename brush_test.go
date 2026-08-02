@@ -256,7 +256,7 @@ func TestPaintFunc_Paint(t *testing.T) {
 	}
 }
 
-func TestCharClass_Paint(t *testing.T) {
+func TestStencil_Paint(t *testing.T) {
 	rule := Stencil{Upper: Red, Lower: Green, Digit: Blue, Punct: Yellow, Symbol: Magenta}
 
 	tests := []struct {
