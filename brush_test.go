@@ -222,4 +222,5 @@ func TestPaintFunc_Paint(t *testing.T) {
 var (
 	_ Painter = Red
 	_ Painter = Style{}
+	_ Painter = PaintFunc(nil)
 )
