@@ -1,6 +1,42 @@
 package brush
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
+
+func TestNoColorEnvSet(t *testing.T) {
+	t.Run("unset", func(t *testing.T) {
+		original, ok := os.LookupEnv("NO_COLOR")
+		os.Unsetenv("NO_COLOR")
+		t.Cleanup(func() {
+			if ok {
+				os.Setenv("NO_COLOR", original)
+			}
+		})
+		if got := noColorEnvSet(); got != false {
+			t.Errorf("noColorEnvSet() = %v, want false", got)
+		}
+	})
+
+	tests := []struct {
+		name  string // description of this test case
+		value string
+		want  bool
+	}{
+		{"empty", "", false},
+		{"set to 1", "1", true},
+		{"set to anything", "yes", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("NO_COLOR", tt.value)
+			if got := noColorEnvSet(); got != tt.want {
+				t.Errorf("noColorEnvSet() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
 
 func TestColor_Paint(t *testing.T) {
 	tests := []struct {
