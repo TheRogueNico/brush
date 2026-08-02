@@ -26,6 +26,12 @@ type Painter interface {
 	Paint(s string) string
 }
 
+type PaintFunc func(s string) string
+
+func (f PaintFunc) Paint(s string) string {
+	return f(s)
+}
+
 // Color represents one of the 16 standard ANSI terminal colors.
 type Color int8
 

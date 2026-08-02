@@ -2,6 +2,7 @@ package brush
 
 import (
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -169,6 +170,49 @@ func TestAttribute_String(t *testing.T) {
 			got := tt.attr.String()
 			if got != tt.want {
 				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestPaintFunc_Paint(t *testing.T) {
+	tests := []struct {
+		name string
+		f    PaintFunc
+		in   string
+		want string
+	}{
+		{
+			name: "identity",
+			f:    func(s string) string { return s },
+			in:   "x",
+			want: "x",
+		},
+		{
+			name: "wraps in brackets",
+			f:    func(s string) string { return "[" + s + "]" },
+			in:   "x",
+			want: "[x]",
+		},
+		{
+			name: "delegates to a Color",
+			f:    Red.Paint,
+			in:   "x",
+			want: "\x1b[31mx\x1b[0m",
+		},
+		{
+			name: "composes with another Painter",
+			f: func(s string) string {
+				return Style{Attributes: Bold}.Paint(strings.ToUpper(s))
+			},
+			in:   "hello",
+			want: "\x1b[1mHELLO\x1b[0m",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.f.Paint(tt.in); got != tt.want {
+				t.Errorf("Paint(%q) = %q, want %q", tt.in, got, tt.want)
 			}
 		})
 	}
