@@ -21,7 +21,7 @@ func TestNoColorEnvSet(t *testing.T) {
 	})
 
 	tests := []struct {
-		name  string // description of this test case
+		name  string
 		value string
 		want  bool
 	}{
@@ -63,7 +63,7 @@ func TestColor_Paint(t *testing.T) {
 
 func TestColor_String(t *testing.T) {
 	tests := []struct {
-		name  string // description of this test case
+		name  string
 		color Color
 		want  string
 	}{
@@ -88,63 +88,63 @@ func TestStyle_Paint(t *testing.T) {
 	errorStyle := Style{Foreground: Black, Background: BrightRed, Attributes: Italic | Bold}
 
 	tests := []struct {
-		name  string // description of this test case
+		name  string
 		style Style
-		text  string
+		in    string
 		want  string
 	}{
 		{
 			name:  "zero value",
 			style: Style{},
-			text:  "no style",
+			in:    "no style",
 			want:  "no style",
 		},
 		{
 			name:  "foreground only",
 			style: infoStyle,
-			text:  "starting up...",
+			in:    "starting up...",
 			want:  "\x1b[34mstarting up...\x1b[0m",
 		},
 		{
 			name:  "background only",
 			style: Style{Background: Blue},
-			text:  "Highlight",
+			in:    "Highlight",
 			want:  "\x1b[44mHighlight\x1b[0m",
 		},
 		{
 			name:  "attributes only",
 			style: Style{Attributes: Underline},
-			text:  "diceware",
+			in:    "diceware",
 			want:  "\x1b[4mdiceware\x1b[0m",
 		},
 		{
 			name:  "attribute and foreground",
 			style: warningStyle,
-			text:  "Disk is nearly full",
+			in:    "Disk is nearly full",
 			want:  "\x1b[3;33mDisk is nearly full\x1b[0m",
 		},
 		{
 			name:  "attributes foreground and background",
 			style: errorStyle,
-			text:  "Connection lost!",
+			in:    "Connection lost!",
 			want:  "\x1b[1;3;30;101mConnection lost!\x1b[0m",
 		},
 		{
 			name:  "explicit NoColor is equivalent to unset",
 			style: Style{Foreground: NoColor, Background: NoColor, Attributes: Bold},
-			text:  "x",
+			in:    "x",
 			want:  "\x1b[1mx\x1b[0m",
 		},
 		{
 			name:  "empty string",
 			style: Style{Foreground: Red, Attributes: Bold},
-			text:  "",
+			in:    "",
 			want:  "",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := tt.style.Paint(tt.text)
+			got := tt.style.Paint(tt.in)
 			if got != tt.want {
 				t.Errorf("Paint() = %v, want %v", got, tt.want)
 			}
@@ -154,7 +154,7 @@ func TestStyle_Paint(t *testing.T) {
 
 func TestAttribute_String(t *testing.T) {
 	tests := []struct {
-		name string // description of this test case
+		name string
 		attr Attribute
 		want string
 	}{
