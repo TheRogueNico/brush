@@ -7,9 +7,13 @@ import (
 	"strings"
 )
 
+func noColorEnvSet() bool {
+	return os.Getenv("NO_COLOR") != ""
+}
+
 // Disabled controls whether Paint methods apply color.
 // This does not disable italic, bold or other styles.
-var Disabled = os.Getenv("NO_COLOR") != ""
+var Disabled = noColorEnvSet()
 
 // SGR escape sequences
 const (
