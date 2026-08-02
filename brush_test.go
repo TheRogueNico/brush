@@ -152,6 +152,44 @@ func TestStyle_Paint(t *testing.T) {
 	}
 }
 
+func TestStyle_PaintDisabled(t *testing.T) {
+	Disabled = true
+	defer func() { Disabled = false }()
+
+	tests := []struct {
+		name  string
+		style Style
+		in    string
+		want  string
+	}{
+		{
+			name:  "color is suppressed",
+			style: Style{Foreground: Red, Background: Black},
+			in:    "Hello",
+			want:  "Hello",
+		},
+		{
+			name:  "attributes not suppressed",
+			style: Style{Attributes: Bold | Italic},
+			in:    "Hello",
+			want:  "\x1b[1;3mHello\x1b[0m",
+		},
+		{
+			name:  "attributes alongside suppressed color",
+			style: Style{Foreground: Red, Attributes: Bold},
+			in:    "Hello",
+			want:  "\x1b[1mHello\x1b[0m",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.style.Paint(tt.in); got != tt.want {
+				t.Errorf("Paint() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestAttribute_String(t *testing.T) {
 	tests := []struct {
 		name string
