@@ -56,7 +56,7 @@ highlight := brush.Style{
 fmt.Println(highlight.Paint("highlighted text"))
 ```
 
-## Getting your hands painty
+### Getting your hands painty
 
 Anything implementing `Painter` can be used as a text painter.
 
@@ -75,6 +75,18 @@ shout := brush.PaintFunc(func(text string) string {
 
 fmt.Println(shout.Paint("hello"))
 ```
+
+`PaintFunc` is for stateless rules. When a rule needs its own state, such as a color chosen at random on every call, or one that only touches part of the string, write it as a type with its own `Paint` method instead:
+
+```go
+type lowercaseOnly struct {
+	Color brush.Color
+}
+
+func (l lowercaseOnly) Paint(text string) string {
+	// return text with ANSI codes
+ }
+ ```
 
 ## Disable Colors
 
@@ -103,6 +115,7 @@ Represents one of the standard ANSI colors.
 Available colors:
 
 ```go
+NoColor // This is the default value
 Black
 Red
 Green
