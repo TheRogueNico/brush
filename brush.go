@@ -221,6 +221,11 @@ func (s Style) Paint(text string) string {
 	return esc + strings.Join(codes, ";") + end + text + reset
 }
 
+// Stencil colors uppercase letters, lowercase letters, digits,
+// punctuation, and symbols using separate colors.
+// Runes outside these five classes are left unstyled.
+//
+// The zero value leaves everything unstyled.
 type Stencil struct {
 	Upper  Color
 	Lower  Color
@@ -229,6 +234,7 @@ type Stencil struct {
 	Symbol Color
 }
 
+// colorFor returns the Color for r's class or NoColor if r matches none of them.
 func (s Stencil) colorFor(r rune) Color {
 	switch {
 	case unicode.IsUpper(r):
@@ -246,6 +252,9 @@ func (s Stencil) colorFor(r rune) Color {
 	}
 }
 
+// Paint colors each run of same-class characters, switching colors
+// at class boundaries and ending with a reset if any color was
+// applied. If Disabled or text is empty, text is returned unchanged.
 func (s Stencil) Paint(text string) string {
 	if text == "" || Disabled {
 		return text
