@@ -218,7 +218,7 @@ func TestPaintFunc_Paint(t *testing.T) {
 	}
 }
 
-// Compile-time assertions that Color and Style satisfy Painter.
+// Compile-time assertions that Color, Style and PaintFunc satisfy Painter.
 var (
 	_ Painter = Red
 	_ Painter = Style{}

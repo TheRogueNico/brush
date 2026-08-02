@@ -175,8 +175,7 @@ type Style struct {
 	Attributes Attribute
 }
 
-// String returns the pipe-separated names of the set attributes,
-// implementing fmt.Stringer.
+// String returns the pipe-separated names of the set attributes, used by fmt.Stringer.
 func (a Attribute) String() string {
 	var names []string
 	for _, t := range attributeTable {
