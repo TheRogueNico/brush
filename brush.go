@@ -23,13 +23,13 @@ const (
 )
 
 type Painter interface {
-	Paint(s string) string
+	Paint(text string) string
 }
 
-type PaintFunc func(s string) string
+type PaintFunc func(text string) string
 
-func (f PaintFunc) Paint(s string) string {
-	return f(s)
+func (f PaintFunc) Paint(text string) string {
+	return f(text)
 }
 
 // Color represents one of the 16 standard ANSI terminal colors.
@@ -80,11 +80,11 @@ func (c Color) bgCode() int {
 // Paint wraps s in the ANSI escape sequence for the foreground color c,
 // followed by a reset sequence. If c is NoColor, coloring is disabled
 // globally via Disabled, or s is empty, s is returned unchanged.
-func (c Color) Paint(s string) string {
-	if s == "" || Disabled || c == NoColor {
-		return s
+func (c Color) Paint(text string) string {
+	if text == "" || Disabled || c == NoColor {
+		return text
 	}
-	return esc + strconv.Itoa(c.fgCode()) + end + s + reset
+	return esc + strconv.Itoa(c.fgCode()) + end + text + reset
 }
 
 var colorNames = [...]string{
