@@ -22,6 +22,10 @@ const (
 	reset = "\x1b[0m"
 )
 
+type Painter interface {
+	Paint(s string) string
+}
+
 // Color represents one of the 16 standard ANSI terminal colors.
 type Color int8
 

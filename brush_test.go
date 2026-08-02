@@ -173,3 +173,9 @@ func TestAttribute_String(t *testing.T) {
 		})
 	}
 }
+
+// Compile-time assertions that Color and Style satisfy Painter.
+var (
+	_ Painter = Red
+	_ Painter = Style{}
+)
