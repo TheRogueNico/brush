@@ -109,9 +109,9 @@ func (c Color) bgCode() int {
 	return int(c-BrightBlack) + 100
 }
 
-// Paint wraps s in the ANSI escape sequence for the foreground color c,
+// Paint wraps text in the ANSI escape sequence for the foreground color c,
 // followed by a reset sequence. If c is NoColor, coloring is disabled
-// globally via Disabled, or s is empty, s is returned unchanged.
+// globally via Disabled, or text is empty, text is returned unchanged.
 func (c Color) Paint(text string) string {
 	if text == "" || Disabled || c == NoColor {
 		return text
