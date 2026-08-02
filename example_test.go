@@ -71,3 +71,19 @@ func Example_customRule() {
 	fmt.Println(rule.Paint("Hello World"))
 	// Output: Hello World
 }
+
+func ExampleStencil_Paint() {
+	// To simplify output
+	brush.Disabled = true
+	defer func() { brush.Disabled = false }()
+
+	rule := brush.Stencil{
+		Upper:  brush.Red,
+		Lower:  brush.Green,
+		Digit:  brush.Blue,
+		Punct:  brush.Yellow,
+		Symbol: brush.Yellow,
+	}
+	fmt.Println(rule.Paint("Hello, World! 123"))
+	// Output: Hello, World! 123
+}
