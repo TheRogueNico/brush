@@ -10,7 +10,13 @@
 //	warn := brush.Style{Foreground: brush.Yellow, Attributes: brush.Bold | brush.Italic}
 //	fmt.Println(warn.Paint("careful"))
 //
-// Color and Style both implement Painter, the package's only
+// A Stencil colors runs of uppercase letters, lowercase letters,
+// digits, punctuation, and symbols with separate colors:
+//
+//	rule := brush.Stencil{Upper: brush.Red, Digit: brush.Blue}
+//	fmt.Println(rule.Paint("Error 403"))
+//
+// Color, Style and Stencil all implement Painter, the package's only
 // interface, so a custom coloring rule needs only a Paint method to be
 // used the same way as the built-in ones. PaintFunc adapts an ordinary
 // function into a Painter:
