@@ -24,12 +24,23 @@ import "github.com/TheRogueNico/brush"
 
 ### Colors
 
-Apply a color directly:
+Apply one of the 16 ANSI colors directly:
 
 ```go
 fmt.Println(brush.Red.Paint("error"))
 fmt.Println(brush.Green.Paint("success"))
 fmt.Println(brush.Yellow.Paint("warning"))
+```
+
+#### Available colors
+
+`NoColor`, This is the default value
+
+```
+Black, Red, Green, Yellow, Blue, Magenta, Cyan, White,
+
+BrightBlack, BrightRed, BrightGreen, BrightYellow,
+BrightBlue, BrightMagenta, BrightCyan, BrightWhite
 ```
 
 ### Styles
@@ -43,6 +54,12 @@ warning := brush.Style{
 }
 
 fmt.Println(warning.Paint("Warning!"))
+```
+
+#### Available attributes
+
+```
+Bold, Faint, Italic, Underline, Blink, Reverse, Strikethrough
 ```
 
 Styles can also apply background colors:
@@ -124,84 +141,3 @@ When disabled, `Paint` returns text without color escape sequences. Text attribu
 If the `NO_COLOR` environment variable is set to any non-empty value, colors are automatically disabled.
 
 `brush` does not attempt to detect whether output is going to a terminal, a file, a pipe, or another destination. It is a simple ANSI wrapper and will not guess how its output will be used. If you need to disable colors, use `brush.Disabled` or the `NO_COLOR` environment variable.
-
-## API Overview
-
-### `Color`
-
-Represents one of the standard ANSI colors.
-
-Available colors:
-
-```go
-NoColor // This is the default value
-Black
-Red
-Green
-Yellow
-Blue
-Magenta
-Cyan
-White
-
-BrightBlack
-BrightRed
-BrightGreen
-BrightYellow
-BrightBlue
-BrightMagenta
-BrightCyan
-BrightWhite
-```
-
-Example:
-
-```go
-brush.Cyan.Paint("hello")
-```
-
----
-
-### `Attribute`
-
-Text attributes can be combined with bitwise OR:
-
-```go
-brush.Bold | brush.Underline
-```
-
-Available attributes:
-
-```go
-Bold
-Faint
-Italic
-Underline
-Blink
-Reverse
-Strikethrough
-```
-
----
-
-### `Style`
-
-A reusable combination of colors and attributes:
-
-```go
-type Style struct {
-	Foreground Color
-	Background Color
-	Attributes Attribute
-}
-```
-
-Example:
-
-```go
-myStyle := brush.Style{
-	Foreground: brush.BrightGreen,
-	Background: brush.Black,
-	Attributes: brush.Bold | brush.Italic | brush.Underline,
-}
-```
