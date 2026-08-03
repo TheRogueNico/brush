@@ -141,3 +141,7 @@ When disabled, `Paint` returns text without color escape sequences. Text attribu
 If the `NO_COLOR` environment variable is set to any non-empty value, colors are automatically disabled.
 
 `brush` does not attempt to detect whether output is going to a terminal, a file, a pipe, or another destination. It is a simple ANSI wrapper and will not guess how its output will be used. If you need to disable colors, use `brush.Disabled` or the `NO_COLOR` environment variable.
+
+## License
+
+This is an educational repository under the [MIT license](LICENSE).
