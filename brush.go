@@ -144,7 +144,7 @@ func (c Color) String() string {
 // Attribute represents a text attribute, such as bold or italic, that
 // can be combined with a Color to form a Style. Attributes are bit
 // flags, combined with the bitwise OR operator, e.g. Bold|Italic.
-type Attribute uint8
+type Attribute uint16
 
 // The supported text attributes. Not every terminal renders every
 // attribute; Blink and Strikethrough support varies most.
