@@ -56,6 +56,25 @@ highlight := brush.Style{
 fmt.Println(highlight.Paint("highlighted text"))
 ```
 
+### Stencil
+
+Color uppercase letters, lowercase letters, digits, punctuation, and symbols each with their own color.
+Anything outside these five classes, such as whitespace, is left unstyled.
+
+```go
+st := brush.Stencil{
+	Upper:  brush.Red,
+	Lower:  brush.Green,
+	Digit:  brush.Blue,
+	Punct:  brush.Yellow,
+	Symbol: brush.Yellow,
+}
+
+fmt.Println(st.Paint("XYZ{F4K3_FL4G}"))
+```
+
+The zero value leaves everything unstyled, so set only the fields you care about.
+
 ### Getting your hands painty
 
 Anything implementing `Painter` can be used as a text painter.
