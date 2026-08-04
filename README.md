@@ -4,8 +4,6 @@ A tiny, dependency-free ANSI styling library for Go.
 
 `brush` wraps strings with terminal escape codes to add colors and text attributes without bringing in complexity. It's small by design and it won't try to print anything itself.
 
-Built mostly for fun, learning, and small projects that need lightweight terminal styling.
-
 ## Installation
 
 Requires Go 1.22 or newer.
